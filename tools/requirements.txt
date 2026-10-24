@@ -1,0 +1,5 @@
+capstone==5.0.9
+cryptography==50.0.2
+pyelftools==0.33
+scons==4.11.1
+unicorn==2.1.4

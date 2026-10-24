@@ -1,0 +1,38 @@
+{
+  "camera": "192.0.2.54",
+  "passed": true,
+  "cycles": [
+    {
+      "cycle": 1,
+      "interrupted_stream_bytes": 15000,
+      "snapshot_ok": true
+    },
+    {
+      "cycle": 2,
+      "interrupted_stream_bytes": 15000,
+      "snapshot_ok": true
+    },
+    {
+      "cycle": 3,
+      "interrupted_stream_bytes": 15000,
+      "snapshot_ok": true
+    },
+    {
+      "cycle": 4,
+      "interrupted_stream_bytes": 15000,
+      "snapshot_ok": true
+    },
+    {
+      "cycle": 5,
+      "interrupted_stream_bytes": 15000,
+      "snapshot_ok": true
+    },
+    {
+      "cycle": 6,
+      "interrupted_stream_bytes": 15000,
+      "snapshot_ok": true
+    }
+  ],
+  "incomplete_request_recovery": true,
+  "publication_note": "Camera IP replaced with documentation-only address; no image payloads included."
+}

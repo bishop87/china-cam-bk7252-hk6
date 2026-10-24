@@ -1,0 +1,42 @@
+# Private laboratory inputs and generated output (never commit these)
+/.venv/
+/build/
+/dist/
+/upstream/
+/analysis/
+/docs/local/
+/app/evidence/
+/app/capture-evidence.json
+/firmware/local-config.json
+/tools/downloads/
+/tools/gcc-arm-none-eabi-*/
+
+# Credentials, recordings and console logs
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.pcap
+*.pcapng
+*.sqlite*
+*.db
+*.bin
+*.rbl
+*.elf
+*.zip
+*.apks
+*.apk
+*.avi
+*.wav
+*.pcm
+*.log
+screenlog.*
+hardcopy.*
+
+# Runtime and editor files
+__pycache__/
+*.py[cod]
+.DS_Store
+.idea/
+.vscode/

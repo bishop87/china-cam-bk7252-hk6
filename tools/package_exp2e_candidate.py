@@ -1,0 +1,48 @@
+"""Package experimental full-VGA EXP2E after offline validation, no installation."""
+import json,struct,zlib
+from build_stock_patch import ROOT,sha,write_bundle,BOOT_SHA256
+from rbl import HEADER,pack,unpack
+from verify_stock_patch import verify_boot_decryption,verify_boot_custom_check
+
+def main():
+ d=ROOT/'analysis/exp2e-candidate';payload=(d/'candidate-logical.bin').read_bytes()
+ m=json.loads((d/'manifest.json').read_text());v=json.loads((d/'validation.json').read_text())
+ assert v['passed'] and v['payload_sha256']==m['payload_sha256']==sha(payload)
+ boot=(ROOT/'analysis/original/bootloader-logical.bin').read_bytes();assert sha(boot)==BOOT_SHA256
+ package=pack(payload,m['version'],1792281600)
+ old=HEADER.unpack((ROOT/'analysis/original/app-logical.bin').read_bytes()[0xfffa0:0x100000]);fields=list(HEADER.unpack_from(package));fields[5]=old[5];fields[-1]=0
+ header=HEADER.pack(*fields);package=header[:92]+struct.pack('<I',zlib.crc32(header[:92]))+package[96:]
+ assert unpack(package)[0]==payload and len(package)<=0xcc000 and len(payload)+96<=0x110000
+ b={'crypto':verify_boot_decryption(boot,package,payload),'custom_check':verify_boot_custom_check(boot,payload)}
+ m.update(status='offline_validated_not_installed',ready_to_flash=False,rbl_sha256=sha(package),rbl_bytes=len(package))
+ readme="""# EXP2E — VGA 640×480 sperimentale
+
+Porta il profilo video=1 da 640×352 a 640×480 modificando un solo byte
+rispetto a EXP2D (istruzione Thumb a 0x51750). Il profilo video=2 resta
+320×176. Tabelle sensore, bitrate, buffer, filtro LAN/NTP, Europe/Rome
+e firma UART sono invariati.
+
+Validati offline diff, routine Thumb, passaggio delle dimensioni al driver,
+contenitore RBL e decifratura/controlli del bootloader originale.
+Per gli esiti hardware consultare hardware-validation.json, se presente.
+In sua assenza il pacchetto è soltanto validato offline.
+Ripristino UART completo non collaudato; recupero di un settore già verificato.
+
+Rigenerazione con .venv/bin/python:
+- tools/build_exp2e_candidate.py
+- tools/package_exp2e_candidate.py
+
+Installer dedicato: tools/ota_exp2e.py; richiede EXP2D verificato, UART
+collegata e Mac/camera sulla stessa LAN. Non usare installer precedenti.
+"""
+ files={'hk6-stock-lan-exp2e.bin':payload,'hk6-stock-lan-exp2e.rbl':package,'manifest.json':(json.dumps(m,indent=2)+'\n').encode(),'validation.json':(d/'validation.json').read_bytes(),'bootloader-validation.json':(json.dumps(b,indent=2)+'\n').encode(),'README.md':readme.encode()}
+ hardware=d/'hardware-validation.json'
+ if hardware.exists():
+  h=json.loads(hardware.read_text())
+  assert h['payload_sha256']==sha(payload) and h['rbl_sha256']==sha(package)
+  assert h['installation']['installed_verified_at_patch_points'] and h['video']['passed']
+  m.update(status='installed_patch_points_and_live_video_verified')
+  files['manifest.json']=(json.dumps(m,indent=2)+'\n').encode()
+  files['hardware-validation.json']=hardware.read_bytes()
+ print(write_bundle(ROOT/'dist/hk6-stock-lan-exp2e',files))
+if __name__=='__main__':main()

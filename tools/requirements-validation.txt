@@ -1,0 +1,2 @@
+# Optional: full JPEG decoding in tools/check_native_http.py
+Pillow>=10,<13

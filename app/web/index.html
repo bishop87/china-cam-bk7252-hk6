@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="it">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>HK6 · Camera locale</title><link rel="stylesheet" href="/style.css"><script src="/app.js" defer></script></head>
+<body>
+<header><a class="brand" href="/" aria-label="HK6 Camera locale"><span class="mark">◉</span><span>HK6<span class="muted"> / Camera locale</span></span></a><span class="local">SOLO SUL TUO MAC</span></header>
+<main>
+<div class="heading"><div><p class="eyebrow">IL TUO SPAZIO, IN DIRETTA</p><h1>Camera di casa</h1><p class="subtitle">Video e impostazioni sulla tua rete.</p></div><div class="connection"><span id="dot" class="dot"></span><span id="connection">Connessione…</span></div></div>
+<div class="layout">
+<section class="viewer" aria-label="Video della camera">
+<div class="viewerbar"><span><span class="tiny-dot"></span> LIVE VIEW</span><span id="camera-ip">—</span></div>
+<div class="picture"><img id="video" src="/stream.mjpg" alt="Video in diretta dalla camera HK6"><div id="offline" hidden>In attesa della camera…</div></div>
+<div class="videotools"><span id="resolution">Risoluzione in lettura</span><div><button id="reload-video" class="quiet" type="button">Ricarica video</button><a class="button secondary" href="/snapshot.jpg" download="hk6-snapshot.jpg">Salva foto ↗</a></div></div>
+<div class="metrics"><div><span>FOTOGRAMMI</span><strong id="frames">—</strong></div><div><span>FLUIDITÀ RICEVUTA</span><strong id="fps">—</strong></div><div><span>ULTIMO FRAME</span><strong id="age">—</strong></div></div>
+<p class="footnote">La camera comunica con il servizio locale. Puoi lasciare aperta questa pagina: il video riprende dopo una disconnessione.</p>
+</section>
+<aside>
+<div class="settings-head"><h2>Impostazioni</h2><button id="refresh" class="quiet" type="button">↻ Aggiorna</button></div>
+<div class="tabs" role="tablist" aria-label="Impostazioni camera"><button role="tab" aria-selected="true" aria-controls="panel-video" id="tab-video" data-tab="video">Video</button><button role="tab" aria-selected="false" aria-controls="panel-storage" id="tab-storage" data-tab="storage" tabindex="-1">Registrazioni</button><button role="tab" aria-selected="false" aria-controls="panel-wifi" id="tab-wifi" data-tab="wifi" tabindex="-1">Wi-Fi</button><button role="tab" aria-selected="false" aria-controls="panel-device" id="tab-device" data-tab="device" tabindex="-1">Dispositivo</button></div>
+<div id="notice" role="status" aria-live="polite">Lettura delle impostazioni…</div>
+<section id="panel-video" role="tabpanel" aria-labelledby="tab-video">
+<form id="profile-form"><label for="profile">Profilo video</label><div class="inputrow"><select id="profile"><option value="1">640 × 480 · VGA</option><option value="2">320 × 240 · QVGA</option></select><button class="secondary" type="submit">Applica</button></div><p class="help">Risoluzione richiesta al firmware. VGA è la modalità nativa del sensore; controlla sempre le dimensioni effettivamente ricevute.</p></form><p id="profile-result" class="help" aria-live="polite"></p>
+<div class="divider"></div><h3>Audio del microfono</h3><button id="audio-toggle" class="secondary" type="button" role="switch" aria-checked="false">Attiva audio</button><p id="audio-status" class="help" aria-live="polite">Audio spento</p><p class="help">Ascolto dal microfono della camera. Nessuna registrazione; si spegne alla disconnessione o alla chiusura della pagina. Audio e video possono avere un lieve ritardo diverso.</p>
+<div class="divider"></div><h3>Immagine</h3><p class="help">Controlli disponibili nei parametri della tua camera.</p>
+<form class="image-form" data-field="rotmir"><label for="orientation">Orientamento</label><div class="inputrow"><select id="orientation" disabled><option value="0">Normale</option><option value="1">Specchio orizzontale</option><option value="2">Capovolto verticale</option><option value="3">Rotazione di 180°</option></select><button class="secondary" disabled>Applica</button></div></form>
+<form class="image-form" data-field="icut"><label for="infrared">Visione notturna</label><div class="inputrow"><select id="infrared" disabled><option value="0">Disattivata</option><option value="1">Attivata</option></select><button class="secondary" disabled>Applica</button></div><p class="help">Impostazione presente nel firmware; l’effetto va verificato sul video.</p></form>
+<form class="image-form" data-field="lamp"><label for="lamp">Luce / indicatore</label><div class="inputrow"><select id="lamp" disabled><option value="0">Spento</option><option value="1">Acceso</option></select><button class="secondary" disabled>Applica</button></div></form>
+</section>
+<section id="panel-storage" role="tabpanel" aria-labelledby="tab-storage" hidden>
+<h3>MicroSD</h3><p id="sd-state" class="help">Aggiorna per leggere la scheda.</p><button id="sd-refresh" class="secondary">Aggiorna microSD</button>
+<div class="divider"></div><h3>Registrazione sulla camera</h3>
+<form id="record-mode-form"><label for="record-mode">Modalità</label><select id="record-mode"><option value="off">Spenta</option><option value="continuous">Continua</option><option value="motion">Su movimento</option></select><button class="secondary">Applica e verifica</button></form>
+<p id="alarm-state" class="help"></p><form id="event-settings"><label for="event-sensitivity">Sensibilità evento</label><select id="event-sensitivity"><option value="1">1</option><option value="2">2</option><option value="3">3</option></select><label for="event-duration">Durata evento (secondi)</label><input id="event-duration" type="number" min="10" max="60" value="60" required><label for="event-interval">Intervallo eventi (secondi)</label><input id="event-interval" type="number" min="30" max="240" value="120" required><button class="secondary">Salva parametri evento</button></form><p class="help">La rilevazione dipende dal firmware. Gli eventi vengono salvati, ma questo firmware non li restituisce nell’elenco: la consultazione degli eventi richiede una correzione firmware.</p><p class="help">La camera registra sulla scheda anche senza questa pagina. Le impostazioni vengono rilette dopo il salvataggio.</p>
+<div class="divider"></div><h3>Archivio</h3>
+<label for="record-date">Data della camera</label><input id="record-date" type="date"><button id="record-search" class="secondary">Cerca filmati</button><p id="record-calendar" class="help"></p>
+<label for="record-hour">Ora</label><select id="record-hour"><option value="">Seleziona una data</option></select>
+<label for="record-file">Filmato</label><select id="record-file"><option value="">Nessun filmato caricato</option></select>
+<p class="note">Prima di riprodurre scegli la modalità registrazione Spenta. Durante la riproduzione il live passa temporaneamente a QVGA per liberare memoria. Stop ripristina il profilo precedente; la registrazione può essere interrotta.</p>
+<p id="record-audio-status" role="status">Audio filmato spento. L’export AVI resta senza audio.</p><div class="inputrow"><button id="record-play" class="secondary">Riproduci</button><button id="record-stop" class="secondary">Stop</button><button id="record-pause" class="secondary">Pausa</button><button id="record-audio" class="secondary" aria-pressed="false">Ascolta audio filmato</button></div>
+<img id="record-player" alt="Filmato dalla microSD" hidden>
+<p id="record-status" class="help" aria-live="polite"></p>
+<a id="record-export" class="button secondary" href="/recording.avi" download="hk6-riproduzione.avi" hidden>Esporta video riprodotto (AVI)</a>
+<p class="help">Esportazione dei fotogrammi ricevuti, senza audio, fino a 32 MiB o 1.800 frame. Non è il file originale; la temporizzazione è stimata dalla ricezione.</p>
+<p class="help">Cancellazione singola e download originale non ancora disponibili: i relativi comandi non sono verificati su questo firmware.</p>
+</section>
+<section id="panel-wifi" role="tabpanel" aria-labelledby="tab-wifi" hidden>
+<div class="current-network"><span class="eyebrow">RETE CONFIGURATA</span><strong id="current-ssid">Non ancora letta</strong><span class="help">Rilevata dalla camera</span></div>
+<form id="wifi-form"><div class="labelrow"><label for="networks">Reti disponibili</label><button id="scan" type="button" class="quiet">Cerca reti</button></div><select id="networks" required><option value="">Avvia una ricerca</option></select><p id="network-info" class="help">La ricerca viene eseguita dalla camera, non dal Mac.</p><label for="wifi-password">Password della nuova rete</label><input id="wifi-password" type="password" autocomplete="new-password" maxlength="63" placeholder="Inserisci la password"><p class="help">La password non viene salvata dal servizio.</p><button type="submit" class="primary full">Collega alla rete scelta</button></form>
+<p class="note">Il cambio Wi-Fi interrompe il video. Collega anche il Mac alla nuova rete; se cambia l’IP della camera, aggiornalo nella scheda Dispositivo.</p>
+</section>
+<section id="panel-device" role="tabpanel" aria-labelledby="tab-device" hidden>
+<dl class="details"><div><dt>Firmware</dt><dd id="firmware">—</dd></div><div><dt>Versione MCU</dt><dd id="mcu">—</dd></div><div><dt>Batteria dichiarata</dt><dd id="battery">—</dd></div><div><dt>Segnale dichiarato</dt><dd id="signal">—</dd></div></dl>
+<div class="divider"></div><form id="target-form"><label for="target">Indirizzo IP della camera</label><input id="target" required placeholder="192.168.1.54" inputmode="decimal"><p class="help">Aggiorna il collegamento del servizio. Non cambia le impostazioni di rete della camera. Valido fino al riavvio del servizio.</p><button class="secondary full">Ricollega a questo indirizzo</button></form>
+<div class="divider"></div><h3>Orologio della camera</h3><p class="help">Sincronizza con l’ora del Mac. Fuso Europe/Rome, con ora legale gestita dal firmware del progetto.</p><p id="clock-status" role="status">Ora non ancora letta.</p><button id="clock-read" class="secondary">Leggi orologio</button><button id="clock-sync" class="secondary">Sincronizza ora</button><div class="divider"></div><h3>Manutenzione</h3><button id="camera-reboot" class="secondary">Riavvia camera</button><p class="help">Interrompe video e registrazione durante il riavvio.</p>
+</section>
+</aside></div>
+<footer><span>HK6 / BK7252</span><span>Un servizio locale. Nessun account aggiuntivo.</span></footer>
+</main>
+<dialog id="wifi-confirm"><form method="dialog"><p class="eyebrow">CAMBIO DI RETE</p><h2>Collegare la camera?</h2><p>Rete scelta: <strong id="confirm-ssid"></strong></p><p>Il video si interromperà. Per ritrovare la camera potrebbe essere necessario collegare il Mac alla nuova rete e aggiornare il suo indirizzo IP.</p><p class="help">Il comando è ricostruito dall’app vendor; il cambio rete non è ancora stato collaudato su questa camera.</p><div class="dialog-actions"><button value="cancel" class="secondary">Annulla</button><button value="confirm" class="primary">Salva Wi-Fi</button></div></form></dialog>
+<dialog id="reboot-confirm"><form method="dialog"><h2>Riavviare la camera?</h2><p>Video e registrazione si interromperanno. Il servizio tenterà automaticamente di riconnettersi.</p><button value="cancel">Annulla</button><button value="confirm">Riavvia</button></form></dialog><script src="/device.js" defer></script><script src="/record-audio.js" defer></script><script src="/storage.js" defer></script><script src="/audio.js" defer></script></body></html>
